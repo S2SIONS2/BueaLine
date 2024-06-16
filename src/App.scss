@@ -1,0 +1,30 @@
+.title{
+    font-family: 'Playwrite NL';
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+    padding:50px 0;
+    font-size: 1.8rem;
+}
+.info{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 30px;
+}
+.info span{
+    margin: 0 5px;
+}
+.navBtn{
+    background-color: #FFF9F4;
+    border: 5px solid #fff;
+    box-sizing: border-box;
+    border-radius: 10px;
+    height: 130px;
+    font-size: 1.5rem;
+}
+.navBtn a{
+    color: inherit;
+    list-style: none;
+    text-decoration: none;
+}
