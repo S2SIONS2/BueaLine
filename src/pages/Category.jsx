@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState} from 'react';
 import './Category.scss';
 import CategoryList from '../components/CategoryList';
 
@@ -9,23 +9,10 @@ const Category = () => {
         setModal(true);
     };
 
-    // 확인 버튼 클릭 시 리스트 넘기기
-    const categoryConfirm = () => {
-        
-    }
-
     // 카테고리 기본 폼
     const [inputValue, setInputValue] = useState([{ name: '', expense: '' }]);
-    // const [form, setForm] = useState({
-    //     count: 1
-    // });
-
     // 카테고리 추가
     const addCategory = () => {
-        // setForm({
-        //     ...form,
-        //     count: form.count + 1
-        // });
         setInputValue([...inputValue, { name: '', expense: '' }]);
     };
 
@@ -33,10 +20,6 @@ const Category = () => {
     const deleteCategory = (index) => {
         const newInputValues = inputValue.filter((_, i) => i !== index);
         setInputValue(newInputValues)
-        // setForm({
-        //     ...form,
-        //     count: form.count - 1
-        // })
     }
     // input handling
     const handleChange = (index, e) => {
@@ -44,6 +27,21 @@ const Category = () => {
         const newInputValues = [...inputValue];
         newInputValues[index] = { ...newInputValues[index], [name]: value };
         setInputValue(newInputValues);
+    };
+
+    // 확인 버튼 클릭 시 리스트 넘기기
+    const [valueArray, setValueArray] = useState([])
+    const categoryConfirm = () => {
+        if(inputValue.every(item => item.name !== '' && item.expense !== '')){
+            setValueArray(inputValue);
+            setModal(false)
+        }else if(inputValue.every(item => item.name !== '')){
+            alert('비용을 입력 해주세요.')
+        }else if(inputValue.every(item => item.expense !== '')){
+            alert('시술 명을 입력 해주세요.')
+        }else{
+            setModal(false)
+        }
     };
 
     return (
@@ -58,7 +56,7 @@ const Category = () => {
                 </button>    
             </div>
             <section className=''>
-                <CategoryList inputValue={inputValue}/>
+                <CategoryList valueArray={valueArray}/>
             </section>
 
             {
@@ -117,8 +115,8 @@ const Category = () => {
                                 type='button' 
                                 className='btn btn-point-dark'
                                 onClick={() => {
-                                    categoryConfirm
-                                    setModal(false)
+                                    categoryConfirm()
+                                    
                                 }}
                             >
                                 확인

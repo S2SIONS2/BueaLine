@@ -1,6 +1,8 @@
 import './CategoryList.scss'
 
-const CategoryList = ({inputValue}) => {
+const CategoryList = ({valueArray}) => {
+    console.log('valueArray:', valueArray);
+    
     return(
         <div className="CategoryList">
             <div className='row flex-column'>
@@ -10,16 +12,16 @@ const CategoryList = ({inputValue}) => {
                 </div>
                 <div className='row row-cols-2 align-items-center'>
                     <div>눈썹</div>
-                    <div>150,000</div>
+                    <div>150,000원</div>
                 </div>
             </div>
             {
-                inputValue.map((item, index) => {
+                valueArray.map((item, index) => {
                     return(
                         <div key={index}>
                             <div className='row row-cols-2 align-items-center th'>
                                 <div>{item.name}</div>
-                                <div>{item.expense}</div>
+                                <div>{item.expense}₩</div>
                             </div>
                             <div className='row row-cols-2 align-items-center'>
                                 
