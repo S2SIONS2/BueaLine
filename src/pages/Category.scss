@@ -1,3 +1,5 @@
+@use '../scss/style.scss';
+
 .btn_wrap{
     width: 100%;
     display: flex;
@@ -7,7 +9,6 @@
     gap: 10px;
 }
 .modalContainer:has(.btn_wrap) button{
-    width: 100px;
     height: 35px;
 }
 
@@ -20,9 +21,10 @@
 .categoryWrap {
     width: 100%;
     padding: 10px;
-    background-color: #eee;
+    background-color: #fafafa;
     border-radius: 5px;
     margin: 10px 0;
+    border: 1px solid style.$point-color-dark;
 }
 .categoryWrap >div{
     margin:10px 0;

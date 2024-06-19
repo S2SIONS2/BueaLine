@@ -9,18 +9,23 @@ const Category = () => {
         setModal(true);
     };
 
-    // 카테고리 추가
+    // 확인 버튼 클릭 시 리스트 넘기기
+    const categoryConfirm = () => {
+        
+    }
+
+    // 카테고리 기본 폼
     const [inputValue, setInputValue] = useState([{ name: '', expense: '' }]);
-    const [form, setForm] = useState({
-        count: 1,
-        element: ''
-    });
-    
+    // const [form, setForm] = useState({
+    //     count: 1
+    // });
+
+    // 카테고리 추가
     const addCategory = () => {
-        setForm({
-            ...form,
-            count: form.count + 1
-        });
+        // setForm({
+        //     ...form,
+        //     count: form.count + 1
+        // });
         setInputValue([...inputValue, { name: '', expense: '' }]);
     };
 
@@ -28,10 +33,10 @@ const Category = () => {
     const deleteCategory = (index) => {
         const newInputValues = inputValue.filter((_, i) => i !== index);
         setInputValue(newInputValues)
-        setForm({
-            ...form,
-            count: form.count - 1
-        })
+        // setForm({
+        //     ...form,
+        //     count: form.count - 1
+        // })
     }
     // input handling
     const handleChange = (index, e) => {
@@ -53,7 +58,7 @@ const Category = () => {
                 </button>    
             </div>
             <section className=''>
-                <CategoryList />
+                <CategoryList inputValue={inputValue}/>
             </section>
 
             {
@@ -63,11 +68,11 @@ const Category = () => {
                     <div className='modalContent'>
                         <div className='row align-items-center justify-content-end row-cols-4' style={{ '--bs-gutter-x': '0px' }}>
                             <button 
-                                className='btn btn-secondary' type='button'
+                                className='btn btn-point-dark' type='button'
                                 onClick={addCategory}
                             >
                                 항목 추가
-                            </button>    
+                            </button>
                         </div>
                         <div className='addCategory'>
                             {
@@ -76,8 +81,8 @@ const Category = () => {
                                         className='categoryWrap'
                                         key={index}
                                     >
-                                        <div className='row align-items-center justify-content-end'>
-                                            <button className='btn btn-light' type='button' onClick={() => deleteCategory(index)}>삭제</button>
+                                        <div className='btn_wrap'>
+                                            <button className='btn btn-point-dark' type='button' onClick={() => deleteCategory(index)}>삭제</button>
                                         </div>
                                         <div className='row align-items-center'>
                                             <div className='col-4'>시술 명</div>
@@ -110,16 +115,17 @@ const Category = () => {
                         <div className='btn_wrap'>
                             <button 
                                 type='button' 
-                                className='btn btn-secondary'
+                                className='btn btn-point-dark'
                                 onClick={() => {
-                                    alert('저장이 완료되었습니다.');
+                                    categoryConfirm
+                                    setModal(false)
                                 }}
                             >
                                 확인
                             </button>
                             <button 
                                 type='button' 
-                                className='btn btn-secondary'
+                                className='btn btn-light'
                                 onClick={() => setModal(false)}
                             >
                                 닫기
