@@ -10,6 +10,11 @@ export default defineConfig({
         target: 'http://stage-kmc.daeho.shop:81/api2/work_category_api/getList',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '') // 경로 재작성
+      },
+      '/add': {
+        target: 'http://stage-kmc.daeho.shop:81/api2/work_category_api/add',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '') // 경로 재작성
       }
     }
   }

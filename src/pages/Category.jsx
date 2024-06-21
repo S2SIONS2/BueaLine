@@ -1,4 +1,5 @@
 import { useState} from 'react';
+import axios from 'axios';
 import './Category.scss';
 import CategoryList from '../components/CategoryList';
 
@@ -44,6 +45,32 @@ const Category = () => {
         }
     };
 
+    // add 카테고리 api 리스트
+    const addApi = async () => {
+        const url = '/add'
+        let params = {
+            parent_id: 0,
+            category_name: '',
+            category_price: '',
+            category_sort: 0,
+            category_cha: 1,
+        }
+        const response = await axios.post(url, params)
+        return response.data
+    }
+
+    useState(() => {
+        const addToApi = async () => {
+            try{
+                const data = await addApi()
+                const list = data.list
+                setValueArray(list)
+            }catch(error){
+                console.log('Error Occured:', error)
+            }
+        }
+        addToApi()
+    }, [])
 
     return (
         <div className='Category'>

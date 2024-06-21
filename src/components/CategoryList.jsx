@@ -4,16 +4,17 @@ import { useEffect, useState } from 'react'
 
 
 const CategoryList = ({valueArray}) => {
+    const [list, setList] = useState([]); // api 리스트
     const apiList = async () => {
         const url = '/getList'
         const response = await axios.get(url)
         return response.data
     }
-
-    const [list, setList] = useState([]);
+ 
     useEffect(() => {
         const getList = async () => {
             try{
+                // 리스트 가져오기
                 const data = await apiList()
                 const list = data.list;
                 setList(list)
@@ -21,7 +22,6 @@ const CategoryList = ({valueArray}) => {
                 console.error(`Error list:`, error);
             }
         }
-        console.log('getList: ', getList())
         getList()
     }, []);
 
@@ -33,15 +33,15 @@ const CategoryList = ({valueArray}) => {
                     <div className='text-center'>비용</div>
                 </div>
                 {
-                list.map((item, index) => {
-                    return (
-                        <div key={index} className='row row-cols-2 align-items-center td'>
-                            <div>{item.category_name}</div>
-                            <div>{item.category_price}₩</div>
-                        </div>
-                    )
-                })
-            }
+                    list.map((item, index) => {
+                        return (
+                            <div key={index} className='row row-cols-2 align-items-center td'>
+                                <div className='text-center'>{item.category_name}</div>
+                                <div className='text-center'>{item.category_price}₩</div>
+                            </div>
+                        )
+                    })
+                }
             </div>
             {/* {
                 valueArray.map((item, index) => {
