@@ -44,6 +44,7 @@ const Category = () => {
         }
     };
 
+
     return (
         <div className='Category'>
             <div className='subTitle'>Category</div>
@@ -55,7 +56,7 @@ const Category = () => {
                     카테고리 관리
                 </button>    
             </div>
-            <section className=''>
+            <section>
                 <CategoryList valueArray={valueArray}/>
             </section>
 
