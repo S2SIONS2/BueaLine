@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Category.scss';
 import CategoryList from '../components/CategoryList';
@@ -10,19 +10,20 @@ const Category = () => {
         setModal(true);
     };
 
-    // 카테고리 기본 폼
-    const [inputValue, setInputValue] = useState([{ name: '', expense: '' }]);
-    // 카테고리 추가
+    // 카테고리 기본 설정
+    const [inputValue, setInputValue] = useState([{ category_name: '', category_price: '' }]);
+    
+    // 카테고리 추가 시
     const addCategory = () => {
-        setInputValue([...inputValue, { name: '', expense: '' }]);
+        setInputValue([...inputValue, { category_name: '', category_price: '' }]);
     };
 
     // 카테고리 삭제
-    const deleteCategory = (index) => {
-        const newInputValues = inputValue.filter((_, i) => i !== index);
-        setInputValue(newInputValues)
-    }
-    // input handling
+    // const deleteCategory = (index) => {
+    //     const newInputValues = inputValue.filter((_, i) => i !== index);
+    //     setInputValue(newInputValues);
+    // };
+
     const handleChange = (index, e) => {
         const { name, value } = e.target;
         const newInputValues = [...inputValue];
@@ -30,47 +31,54 @@ const Category = () => {
         setInputValue(newInputValues);
     };
 
-    // 확인 버튼 클릭 시 리스트 넘기기
-    const [valueArray, setValueArray] = useState([])
-    const categoryConfirm = () => {
-        if(inputValue.every(item => item.name !== '' && item.expense !== '')){
-            setValueArray(inputValue);
-            setModal(false)
-        }else if(inputValue.every(item => item.name !== '')){
-            alert('비용을 입력 해주세요.')
-        }else if(inputValue.every(item => item.expense !== '')){
-            alert('시술 명을 입력 해주세요.')
-        }else{
-            setModal(false)
+    const [valueArray, setValueArray] = useState([]);
+
+    const categoryConfirm = async () => {
+        try {
+            if (inputValue.every(item => item.category_name !== '' && item.category_price !== '')) {
+                for (const item of inputValue) {
+                    await addApi(item);
+                }
+                setValueArray(inputValue);
+                setModal(false);
+            } else if (inputValue.every(item => item.category_name !== '')) {
+                alert('비용을 입력 해주세요.');
+            } else if (inputValue.every(item => item.category_price !== '')) {
+                alert('시술 명을 입력 해주세요.');
+            } else {
+                setModal(false);
+            }
+        } catch (error) {
+            console.log(`Error occured:`, error);
         }
     };
 
-    // add 카테고리 api 리스트
-    const addApi = async () => {
-        const url = '/add'
-        let params = {
+    const addApi = async (item) => {
+        const url = '/add';
+        const params = {
             parent_id: 0,
-            category_name: '',
-            category_price: '',
+            category_name: item.category_name,
+            category_price: item.category_price,
             category_sort: 0,
             category_cha: 1,
-        }
-        const response = await axios.post(url, params)
-        return response.data
-    }
+        };
+        const response = await axios.post(url, params);
+        return response.data;
+    };
 
-    useState(() => {
-        const addToApi = async () => {
-            try{
-                const data = await addApi()
-                const list = data.list
-                setValueArray(list)
-            }catch(error){
-                console.log('Error Occured:', error)
+    useEffect(() => {
+        const fetchInitialData = async () => {
+            try {
+                const response = await axios.get('/getList');
+                setValueArray(response.data.list);
+            } catch (error) {
+                console.log('Error Occured:', error);
             }
-        }
-        addToApi()
-    }, [])
+        };
+        fetchInitialData();
+    }, []);
+
+    
 
     return (
         <div className='Category'>
@@ -80,17 +88,17 @@ const Category = () => {
                     className='openModal btn btn-secondary' type='button'
                     onClick={openModal}
                 >
-                    카테고리 관리
+                    카테고리 추가
                 </button>    
             </div>
             <section>
-                <CategoryList valueArray={valueArray}/>
+                <CategoryList valueArray={valueArray} setValueArray={setValueArray}/>
             </section>
 
             {
                 modal && 
                 <article className='modalContainer'>
-                    <div className='modalHeader'>카테고리 관리</div>
+                    <div className='modalHeader'>카테고리 추가</div>
                     <div className='modalContent'>
                         <div className='row align-items-center justify-content-end row-cols-4' style={{ '--bs-gutter-x': '0px' }}>
                             <button 
@@ -107,17 +115,17 @@ const Category = () => {
                                         className='categoryWrap'
                                         key={index}
                                     >
-                                        <div className='btn_wrap'>
+                                        {/* <div className='btn_wrap'>
                                             <button className='btn btn-point-dark' type='button' onClick={() => deleteCategory(index)}>삭제</button>
-                                        </div>
+                                        </div> */}
                                         <div className='row align-items-center'>
                                             <div className='col-4'>시술 명</div>
                                             <div className='col-8'>
                                                 <input
                                                     className='col-12' 
                                                     type='text'
-                                                    name='name'
-                                                    value={item.name}
+                                                    name='category_name'
+                                                    value={item.category_name}
                                                     onChange={(e) => handleChange(index, e)}
                                                 />
                                             </div>
@@ -128,8 +136,8 @@ const Category = () => {
                                                 <input
                                                     className='col-12'
                                                     type='number'
-                                                    name='expense'
-                                                    value={item.expense}
+                                                    name='category_price'
+                                                    value={item.category_price}
                                                     onChange={(e) => handleChange(index, e)}
                                                 />
                                             </div>
@@ -142,10 +150,7 @@ const Category = () => {
                             <button 
                                 type='button' 
                                 className='btn btn-point-dark'
-                                onClick={() => {
-                                    categoryConfirm()
-                                    
-                                }}
+                                onClick={categoryConfirm}
                             >
                                 확인
                             </button>

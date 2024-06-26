@@ -1,31 +1,30 @@
-import './CategoryList.scss'
-import axios from 'axios'
-import { useEffect, useState } from 'react'
+import './CategoryList.scss';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
-
-const CategoryList = ({valueArray}) => {
+const CategoryList = ({ valueArray }) => {
     const [list, setList] = useState([]); // api 리스트
+
     const apiList = async () => {
-        const url = '/getList'
-        const response = await axios.get(url)
-        return response.data
-    }
- 
+        const url = '/getList';
+        const response = await axios.get(url);
+        return response.data;
+    };
+
     useEffect(() => {
         const getList = async () => {
-            try{
-                // 리스트 가져오기
-                const data = await apiList()
-                const list = data.list;
-                setList(list)
-            }catch(error){
+            try {
+                const data = await apiList();
+                const listFromApi = data.list;
+                setList([...valueArray, ...listFromApi]);
+            } catch (error) {
                 console.error(`Error list:`, error);
             }
-        }
-        getList()
-    }, []);
+        };
+        getList();
+    }, [valueArray]);
 
-    return(
+    return (
         <div className="CategoryList">
             <div className='row flex-column'>
                 <div className='row row-cols-2 align-items-center th'>
@@ -39,28 +38,12 @@ const CategoryList = ({valueArray}) => {
                                 <div className='text-center'>{item.category_name}</div>
                                 <div className='text-center'>{item.category_price}₩</div>
                             </div>
-                        )
+                        );
                     })
                 }
             </div>
-            {/* {
-                valueArray.map((item, index) => {
-                    return(
-                        <div key={index}>
-                            <div className='row row-cols-2 align-items-center td'>
-                                <div>{item.name}</div>
-                                <div>{item.expense}₩</div>
-                            </div>
-                            <div className='row row-cols-2 align-items-center td'>
-                                
-                            </div>
-                        </div>
-                    )
-                })
-            }    */}
-            
         </div>
-    )
-}
+    );
+};
 
 export default CategoryList;
